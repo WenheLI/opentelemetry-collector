@@ -81,13 +81,28 @@ var scopeMetricsSlice = &sliceOfPtrs{
 	element:    scopeMetrics,
 }
 
+var isSLIField = &primitiveField{
+	fieldName:       "IsSLI",
+	originFieldName: "IsSli",
+	returnType:      "bool",
+	defaultVal:      "false",
+}
+
+var SLIDetails = &sliceField{
+	fieldName:       "SliDetail",
+	originFieldName: "SliDetail",
+	returnSlice:     mapStruct,
+}
+
 var scopeMetrics = &messageValueStruct{
 	structName:     "ScopeMetrics",
 	description:    "// ScopeMetrics is a collection of metrics from a LibraryInstrumentation.",
 	originFullName: "otlpmetrics.ScopeMetrics",
 	fields: []baseField{
 		scopeField,
+		isSLIField,
 		schemaURLField,
+		SLIDetails,
 		&sliceField{
 			fieldName:       "Metrics",
 			originFieldName: "Metrics",
