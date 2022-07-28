@@ -314,7 +314,7 @@ func TestScopeMetrics_Scope(t *testing.T) {
 func TestScopeMetrics_IsSLI(t *testing.T) {
 	ms := NewScopeMetrics()
 	assert.EqualValues(t, false, ms.IsSLI())
-	testValIsSLI := 
+	testValIsSLI := false
 	ms.SetIsSLI(testValIsSLI)
 	assert.EqualValues(t, testValIsSLI, ms.IsSLI())
 }
@@ -2013,7 +2013,7 @@ func generateTestScopeMetrics() ScopeMetrics {
 
 func fillTestScopeMetrics(tv ScopeMetrics) {
 	fillTestInstrumentationScope(tv.Scope())
-	tv.SetIsSLI()
+	tv.SetIsSLI(false)
 	tv.SetSchemaUrl("https://opentelemetry.io/schemas/1.5.0")
 	fillTestMap(tv.SliDetail())
 	fillTestMetricSlice(tv.Metrics())

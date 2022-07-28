@@ -86,6 +86,7 @@ var isSLIField = &primitiveField{
 	originFieldName: "IsSli",
 	returnType:      "bool",
 	defaultVal:      "false",
+	testVal:         "false",
 }
 
 var SLIDetails = &sliceField{
