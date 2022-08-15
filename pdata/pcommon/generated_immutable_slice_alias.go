@@ -24,15 +24,14 @@ type ImmutableByteSlice = internal.ImmutableByteSlice
 
 // NewImmutableByteSlice creates a new ImmutableByteSlice by copying the provided []byte slice.
 var NewImmutableByteSlice = internal.NewImmutableByteSlice
-
 // ImmutableFloat64Slice represents a []float64 slice that cannot be mutated.
 type ImmutableFloat64Slice = internal.ImmutableFloat64Slice
 
 // NewImmutableFloat64Slice creates a new ImmutableFloat64Slice by copying the provided []float64 slice.
 var NewImmutableFloat64Slice = internal.NewImmutableFloat64Slice
-
 // ImmutableUInt64Slice represents a []uint64 slice that cannot be mutated.
 type ImmutableUInt64Slice = internal.ImmutableUInt64Slice
 
 // NewImmutableUInt64Slice creates a new ImmutableUInt64Slice by copying the provided []uint64 slice.
 var NewImmutableUInt64Slice = internal.NewImmutableUInt64Slice
+

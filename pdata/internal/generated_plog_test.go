@@ -135,6 +135,7 @@ func TestResourceLogsSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestResourceLogs_MoveTo(t *testing.T) {
 	ms := generateTestResourceLogs()
 	dest := NewResourceLogs()
@@ -285,6 +286,7 @@ func TestScopeLogsSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestScopeLogs_MoveTo(t *testing.T) {
 	ms := generateTestScopeLogs()
 	dest := NewScopeLogs()
@@ -434,6 +436,7 @@ func TestLogRecordSlice_RemoveIf(t *testing.T) {
 	})
 	assert.Equal(t, 5, filtered.Len())
 }
+
 
 func TestLogRecord_MoveTo(t *testing.T) {
 	ms := generateTestLogRecord()

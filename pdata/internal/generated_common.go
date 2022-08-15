@@ -162,7 +162,6 @@ func (es Slice) AppendEmpty() Value {
 	*es.orig = append(*es.orig, otlpcommon.AnyValue{})
 	return es.At(es.Len() - 1)
 }
-
 // MoveAndAppendTo moves all elements from the current slice and appends them to the dest.
 // The current slice will be cleared.
 func (es Slice) MoveAndAppendTo(dest Slice) {

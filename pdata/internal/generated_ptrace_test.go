@@ -135,6 +135,7 @@ func TestResourceSpansSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestResourceSpans_MoveTo(t *testing.T) {
 	ms := generateTestResourceSpans()
 	dest := NewResourceSpans()
@@ -285,6 +286,7 @@ func TestScopeSpansSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestScopeSpans_MoveTo(t *testing.T) {
 	ms := generateTestScopeSpans()
 	dest := NewScopeSpans()
@@ -434,6 +436,7 @@ func TestSpanSlice_RemoveIf(t *testing.T) {
 	})
 	assert.Equal(t, 5, filtered.Len())
 }
+
 
 func TestSpan_MoveTo(t *testing.T) {
 	ms := generateTestSpan()
@@ -681,6 +684,7 @@ func TestSpanEventSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestSpanEvent_MoveTo(t *testing.T) {
 	ms := generateTestSpanEvent()
 	dest := NewSpanEvent()
@@ -841,6 +845,7 @@ func TestSpanLinkSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestSpanLink_MoveTo(t *testing.T) {
 	ms := generateTestSpanLink()
 	dest := NewSpanLink()
@@ -898,6 +903,7 @@ func TestSpanLink_DroppedAttributesCount(t *testing.T) {
 	ms.SetDroppedAttributesCount(testValDroppedAttributesCount)
 	assert.EqualValues(t, testValDroppedAttributesCount, ms.DroppedAttributesCount())
 }
+
 
 func TestSpanStatus_MoveTo(t *testing.T) {
 	ms := generateTestSpanStatus()

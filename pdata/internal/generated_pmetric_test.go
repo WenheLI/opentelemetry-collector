@@ -135,6 +135,7 @@ func TestResourceMetricsSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestResourceMetrics_MoveTo(t *testing.T) {
 	ms := generateTestResourceMetrics()
 	dest := NewResourceMetrics()
@@ -285,6 +286,7 @@ func TestScopeMetricsSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestScopeMetrics_MoveTo(t *testing.T) {
 	ms := generateTestScopeMetrics()
 	dest := NewScopeMetrics()
@@ -309,12 +311,28 @@ func TestScopeMetrics_Scope(t *testing.T) {
 	assert.EqualValues(t, generateTestInstrumentationScope(), ms.Scope())
 }
 
+func TestScopeMetrics_IsSLI(t *testing.T) {
+	ms := NewScopeMetrics()
+	assert.EqualValues(t, false, ms.IsSLI())
+	testValIsSLI := false
+	ms.SetIsSLI(testValIsSLI)
+	assert.EqualValues(t, testValIsSLI, ms.IsSLI())
+}
+
 func TestScopeMetrics_SchemaUrl(t *testing.T) {
 	ms := NewScopeMetrics()
 	assert.EqualValues(t, "", ms.SchemaUrl())
 	testValSchemaUrl := "https://opentelemetry.io/schemas/1.5.0"
 	ms.SetSchemaUrl(testValSchemaUrl)
 	assert.EqualValues(t, testValSchemaUrl, ms.SchemaUrl())
+}
+
+func TestScopeMetrics_SliDetail(t *testing.T) {
+	ms := NewScopeMetrics()
+	assert.EqualValues(t, NewMap(), ms.SliDetail())
+	fillTestMap(ms.SliDetail())
+	testValSliDetail := generateTestMap()
+	assert.EqualValues(t, testValSliDetail, ms.SliDetail())
 }
 
 func TestScopeMetrics_Metrics(t *testing.T) {
@@ -435,6 +453,7 @@ func TestMetricSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestMetric_MoveTo(t *testing.T) {
 	ms := generateTestMetric()
 	dest := NewMetric()
@@ -486,20 +505,20 @@ func TestMetricDataType(t *testing.T) {
 	assert.Equal(t, Histogram{}, tv.Histogram())
 	assert.Equal(t, ExponentialHistogram{}, tv.ExponentialHistogram())
 	assert.Equal(t, Summary{}, tv.Summary())
-	tv.SetDataType(MetricDataTypeGauge)
-	fillTestGauge(tv.Gauge())
+tv.SetDataType(MetricDataTypeGauge)
+fillTestGauge(tv.Gauge())
 	assert.Equal(t, MetricDataTypeGauge, tv.DataType())
-	tv.SetDataType(MetricDataTypeSum)
-	fillTestSum(tv.Sum())
+tv.SetDataType(MetricDataTypeSum)
+fillTestSum(tv.Sum())
 	assert.Equal(t, MetricDataTypeSum, tv.DataType())
-	tv.SetDataType(MetricDataTypeHistogram)
-	fillTestHistogram(tv.Histogram())
+tv.SetDataType(MetricDataTypeHistogram)
+fillTestHistogram(tv.Histogram())
 	assert.Equal(t, MetricDataTypeHistogram, tv.DataType())
-	tv.SetDataType(MetricDataTypeExponentialHistogram)
-	fillTestExponentialHistogram(tv.ExponentialHistogram())
+tv.SetDataType(MetricDataTypeExponentialHistogram)
+fillTestExponentialHistogram(tv.ExponentialHistogram())
 	assert.Equal(t, MetricDataTypeExponentialHistogram, tv.DataType())
-	tv.SetDataType(MetricDataTypeSummary)
-	fillTestSummary(tv.Summary())
+tv.SetDataType(MetricDataTypeSummary)
+fillTestSummary(tv.Summary())
 	assert.Equal(t, MetricDataTypeSummary, tv.DataType())
 }
 
@@ -583,6 +602,9 @@ func TestMetric_CopyTo_Summary(t *testing.T) {
 	assert.EqualValues(t, ms, dest)
 }
 
+
+
+
 func TestGauge_MoveTo(t *testing.T) {
 	ms := generateTestGauge()
 	dest := NewGauge()
@@ -608,6 +630,7 @@ func TestGauge_DataPoints(t *testing.T) {
 	testValDataPoints := generateTestNumberDataPointSlice()
 	assert.EqualValues(t, testValDataPoints, ms.DataPoints())
 }
+
 
 func TestSum_MoveTo(t *testing.T) {
 	ms := generateTestSum()
@@ -651,6 +674,7 @@ func TestSum_DataPoints(t *testing.T) {
 	assert.EqualValues(t, testValDataPoints, ms.DataPoints())
 }
 
+
 func TestHistogram_MoveTo(t *testing.T) {
 	ms := generateTestHistogram()
 	dest := NewHistogram()
@@ -685,6 +709,7 @@ func TestHistogram_DataPoints(t *testing.T) {
 	assert.EqualValues(t, testValDataPoints, ms.DataPoints())
 }
 
+
 func TestExponentialHistogram_MoveTo(t *testing.T) {
 	ms := generateTestExponentialHistogram()
 	dest := NewExponentialHistogram()
@@ -718,6 +743,7 @@ func TestExponentialHistogram_DataPoints(t *testing.T) {
 	testValDataPoints := generateTestExponentialHistogramDataPointSlice()
 	assert.EqualValues(t, testValDataPoints, ms.DataPoints())
 }
+
 
 func TestSummary_MoveTo(t *testing.T) {
 	ms := generateTestSummary()
@@ -855,6 +881,7 @@ func TestNumberDataPointSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestNumberDataPoint_MoveTo(t *testing.T) {
 	ms := generateTestNumberDataPoint()
 	dest := NewNumberDataPoint()
@@ -901,9 +928,9 @@ func TestNumberDataPointValueType(t *testing.T) {
 	tv := NewNumberDataPoint()
 	assert.Equal(t, NumberDataPointValueTypeNone, tv.ValueType())
 	assert.Equal(t, "", NumberDataPointValueType(1000).String())
-	tv.SetDoubleVal(float64(17.13))
+	 tv.SetDoubleVal(float64(17.13))
 	assert.Equal(t, NumberDataPointValueTypeDouble, tv.ValueType())
-	tv.SetIntVal(int64(17))
+	 tv.SetIntVal(int64(17))
 	assert.Equal(t, NumberDataPointValueTypeInt, tv.ValueType())
 }
 
@@ -922,6 +949,8 @@ func TestNumberDataPoint_IntVal(t *testing.T) {
 	ms.SetIntVal(testValIntVal)
 	assert.EqualValues(t, testValIntVal, ms.IntVal())
 }
+
+
 
 func TestNumberDataPoint_Exemplars(t *testing.T) {
 	ms := NewNumberDataPoint()
@@ -1049,6 +1078,7 @@ func TestHistogramDataPointSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestHistogramDataPoint_MoveTo(t *testing.T) {
 	ms := generateTestHistogramDataPoint()
 	dest := NewHistogramDataPoint()
@@ -1107,6 +1137,7 @@ func TestHistogramDataPoint_Sum(t *testing.T) {
 	assert.EqualValues(t, testValSum, ms.Sum())
 }
 
+
 func TestHistogramDataPoint_BucketCounts(t *testing.T) {
 	ms := NewHistogramDataPoint()
 	assert.EqualValues(t, ImmutableUInt64Slice{}, ms.BucketCounts())
@@ -1147,6 +1178,7 @@ func TestHistogramDataPoint_Min(t *testing.T) {
 	assert.EqualValues(t, testValMin, ms.Min())
 }
 
+
 func TestHistogramDataPoint_Max(t *testing.T) {
 	ms := NewHistogramDataPoint()
 	assert.EqualValues(t, float64(0.0), ms.Max())
@@ -1154,6 +1186,7 @@ func TestHistogramDataPoint_Max(t *testing.T) {
 	ms.SetMax(testValMax)
 	assert.EqualValues(t, testValMax, ms.Max())
 }
+
 
 func TestExponentialHistogramDataPointSlice(t *testing.T) {
 	es := NewExponentialHistogramDataPointSlice()
@@ -1265,6 +1298,7 @@ func TestExponentialHistogramDataPointSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestExponentialHistogramDataPoint_MoveTo(t *testing.T) {
 	ms := generateTestExponentialHistogramDataPoint()
 	dest := NewExponentialHistogramDataPoint()
@@ -1323,6 +1357,7 @@ func TestExponentialHistogramDataPoint_Sum(t *testing.T) {
 	assert.EqualValues(t, testValSum, ms.Sum())
 }
 
+
 func TestExponentialHistogramDataPoint_Scale(t *testing.T) {
 	ms := NewExponentialHistogramDataPoint()
 	assert.EqualValues(t, int32(0), ms.Scale())
@@ -1375,6 +1410,7 @@ func TestExponentialHistogramDataPoint_Min(t *testing.T) {
 	assert.EqualValues(t, testValMin, ms.Min())
 }
 
+
 func TestExponentialHistogramDataPoint_Max(t *testing.T) {
 	ms := NewExponentialHistogramDataPoint()
 	assert.EqualValues(t, float64(0.0), ms.Max())
@@ -1382,6 +1418,8 @@ func TestExponentialHistogramDataPoint_Max(t *testing.T) {
 	ms.SetMax(testValMax)
 	assert.EqualValues(t, testValMax, ms.Max())
 }
+
+
 
 func TestBuckets_MoveTo(t *testing.T) {
 	ms := generateTestBuckets()
@@ -1526,6 +1564,7 @@ func TestSummaryDataPointSlice_RemoveIf(t *testing.T) {
 	})
 	assert.Equal(t, 5, filtered.Len())
 }
+
 
 func TestSummaryDataPoint_MoveTo(t *testing.T) {
 	ms := generateTestSummaryDataPoint()
@@ -1711,6 +1750,7 @@ func TestValueAtQuantileSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestValueAtQuantile_MoveTo(t *testing.T) {
 	ms := generateTestValueAtQuantile()
 	dest := NewValueAtQuantile()
@@ -1846,6 +1886,7 @@ func TestExemplarSlice_RemoveIf(t *testing.T) {
 	assert.Equal(t, 5, filtered.Len())
 }
 
+
 func TestExemplar_MoveTo(t *testing.T) {
 	ms := generateTestExemplar()
 	dest := NewExemplar()
@@ -1876,9 +1917,9 @@ func TestExemplarValueType(t *testing.T) {
 	tv := NewExemplar()
 	assert.Equal(t, ExemplarValueTypeNone, tv.ValueType())
 	assert.Equal(t, "", ExemplarValueType(1000).String())
-	tv.SetDoubleVal(float64(17.13))
+	 tv.SetDoubleVal(float64(17.13))
 	assert.Equal(t, ExemplarValueTypeDouble, tv.ValueType())
-	tv.SetIntVal(int64(17))
+	 tv.SetIntVal(int64(17))
 	assert.Equal(t, ExemplarValueTypeInt, tv.ValueType())
 }
 
@@ -1897,6 +1938,8 @@ func TestExemplar_IntVal(t *testing.T) {
 	ms.SetIntVal(testValIntVal)
 	assert.EqualValues(t, testValIntVal, ms.IntVal())
 }
+
+
 
 func TestExemplar_FilteredAttributes(t *testing.T) {
 	ms := NewExemplar()
@@ -1970,7 +2013,9 @@ func generateTestScopeMetrics() ScopeMetrics {
 
 func fillTestScopeMetrics(tv ScopeMetrics) {
 	fillTestInstrumentationScope(tv.Scope())
+	tv.SetIsSLI(false)
 	tv.SetSchemaUrl("https://opentelemetry.io/schemas/1.5.0")
+	fillTestMap(tv.SliDetail())
 	fillTestMetricSlice(tv.Metrics())
 }
 
@@ -1998,8 +2043,8 @@ func fillTestMetric(tv Metric) {
 	tv.SetName("test_name")
 	tv.SetDescription("test_description")
 	tv.SetUnit("1")
-	tv.SetDataType(MetricDataTypeSum)
-	fillTestSum(tv.Sum())
+tv.SetDataType(MetricDataTypeSum)
+fillTestSum(tv.Sum())
 }
 
 func generateTestGauge() Gauge {
@@ -2080,7 +2125,7 @@ func fillTestNumberDataPoint(tv NumberDataPoint) {
 	fillTestMap(tv.Attributes())
 	tv.SetStartTimestamp(Timestamp(1234567890))
 	tv.SetTimestamp(Timestamp(1234567890))
-	tv.SetDoubleVal(float64(17.13))
+	 tv.SetDoubleVal(float64(17.13))
 	fillTestExemplarSlice(tv.Exemplars())
 	tv.SetFlags(MetricDataPointFlagsNone)
 }
@@ -2110,13 +2155,13 @@ func fillTestHistogramDataPoint(tv HistogramDataPoint) {
 	tv.SetStartTimestamp(Timestamp(1234567890))
 	tv.SetTimestamp(Timestamp(1234567890))
 	tv.SetCount(uint64(17))
-	tv.SetSum(float64(17.13))
+	 tv.SetSum(float64(17.13))
 	tv.SetBucketCounts(NewImmutableUInt64Slice([]uint64{1, 2, 3}))
 	tv.SetExplicitBounds(NewImmutableFloat64Slice([]float64{1, 2, 3}))
 	fillTestExemplarSlice(tv.Exemplars())
 	tv.SetFlags(MetricDataPointFlagsNone)
-	tv.SetMin(float64(9.23))
-	tv.SetMax(float64(182.55))
+	 tv.SetMin(float64(9.23))
+	 tv.SetMax(float64(182.55))
 }
 
 func generateTestExponentialHistogramDataPointSlice() ExponentialHistogramDataPointSlice {
@@ -2144,15 +2189,15 @@ func fillTestExponentialHistogramDataPoint(tv ExponentialHistogramDataPoint) {
 	tv.SetStartTimestamp(Timestamp(1234567890))
 	tv.SetTimestamp(Timestamp(1234567890))
 	tv.SetCount(uint64(17))
-	tv.SetSum(float64(17.13))
+	 tv.SetSum(float64(17.13))
 	tv.SetScale(int32(4))
 	tv.SetZeroCount(uint64(201))
 	fillTestBuckets(tv.Positive())
 	fillTestBuckets(tv.Negative())
 	fillTestExemplarSlice(tv.Exemplars())
 	tv.SetFlags(MetricDataPointFlagsNone)
-	tv.SetMin(float64(9.23))
-	tv.SetMax(float64(182.55))
+	 tv.SetMin(float64(9.23))
+	 tv.SetMax(float64(182.55))
 }
 
 func generateTestBuckets() Buckets {
@@ -2243,7 +2288,7 @@ func generateTestExemplar() Exemplar {
 
 func fillTestExemplar(tv Exemplar) {
 	tv.SetTimestamp(Timestamp(1234567890))
-	tv.SetIntVal(int64(17))
+	 tv.SetIntVal(int64(17))
 	fillTestMap(tv.FilteredAttributes())
 	tv.SetTraceID(NewTraceID([16]byte{1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1}))
 	tv.SetSpanID(NewSpanID([8]byte{1, 2, 3, 4, 5, 6, 7, 8}))

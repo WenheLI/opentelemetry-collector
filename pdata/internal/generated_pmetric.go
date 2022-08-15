@@ -389,6 +389,16 @@ func (ms ScopeMetrics) Scope() InstrumentationScope {
 	return newInstrumentationScope(&(*ms.orig).Scope)
 }
 
+// IsSLI returns the issli associated with this ScopeMetrics.
+func (ms ScopeMetrics) IsSLI() bool {
+	return (*ms.orig).IsSli
+}
+
+// SetIsSLI replaces the issli associated with this ScopeMetrics.
+func (ms ScopeMetrics) SetIsSLI(v bool) {
+	(*ms.orig).IsSli = v
+}
+
 // SchemaUrl returns the schemaurl associated with this ScopeMetrics.
 func (ms ScopeMetrics) SchemaUrl() string {
 	return (*ms.orig).SchemaUrl
@@ -399,6 +409,11 @@ func (ms ScopeMetrics) SetSchemaUrl(v string) {
 	(*ms.orig).SchemaUrl = v
 }
 
+// SliDetail returns the SliDetail associated with this ScopeMetrics.
+func (ms ScopeMetrics) SliDetail() Map {
+	return newMap(&(*ms.orig).SliDetail)
+}
+
 // Metrics returns the Metrics associated with this ScopeMetrics.
 func (ms ScopeMetrics) Metrics() MetricSlice {
 	return newMetricSlice(&(*ms.orig).Metrics)
@@ -407,7 +422,9 @@ func (ms ScopeMetrics) Metrics() MetricSlice {
 // CopyTo copies all properties from the current struct to the dest.
 func (ms ScopeMetrics) CopyTo(dest ScopeMetrics) {
 	ms.Scope().CopyTo(dest.Scope())
+	dest.SetIsSLI(ms.IsSLI())
 	dest.SetSchemaUrl(ms.SchemaUrl())
+	ms.SliDetail().CopyTo(dest.SliDetail())
 	ms.Metrics().CopyTo(dest.Metrics())
 }
 
@@ -629,7 +646,7 @@ func (ms Metric) DataType() MetricDataType {
 
 // Gauge returns the gauge associated with this Metric.
 //
-// Calling this function when DataType() != MetricDataTypeGauge returns an invalid
+// Calling this function when DataType() != MetricDataTypeGauge returns an invalid 
 // zero-initialized instance of Gauge. Note that using such Gauge instance can cause panic.
 //
 // Calling this function on zero-initialized Metric will cause a panic.
@@ -643,7 +660,7 @@ func (ms Metric) Gauge() Gauge {
 
 // Sum returns the sum associated with this Metric.
 //
-// Calling this function when DataType() != MetricDataTypeSum returns an invalid
+// Calling this function when DataType() != MetricDataTypeSum returns an invalid 
 // zero-initialized instance of Sum. Note that using such Sum instance can cause panic.
 //
 // Calling this function on zero-initialized Metric will cause a panic.
@@ -657,7 +674,7 @@ func (ms Metric) Sum() Sum {
 
 // Histogram returns the histogram associated with this Metric.
 //
-// Calling this function when DataType() != MetricDataTypeHistogram returns an invalid
+// Calling this function when DataType() != MetricDataTypeHistogram returns an invalid 
 // zero-initialized instance of Histogram. Note that using such Histogram instance can cause panic.
 //
 // Calling this function on zero-initialized Metric will cause a panic.
@@ -671,7 +688,7 @@ func (ms Metric) Histogram() Histogram {
 
 // ExponentialHistogram returns the exponentialhistogram associated with this Metric.
 //
-// Calling this function when DataType() != MetricDataTypeExponentialHistogram returns an invalid
+// Calling this function when DataType() != MetricDataTypeExponentialHistogram returns an invalid 
 // zero-initialized instance of ExponentialHistogram. Note that using such ExponentialHistogram instance can cause panic.
 //
 // Calling this function on zero-initialized Metric will cause a panic.
@@ -685,7 +702,7 @@ func (ms Metric) ExponentialHistogram() ExponentialHistogram {
 
 // Summary returns the summary associated with this Metric.
 //
-// Calling this function when DataType() != MetricDataTypeSummary returns an invalid
+// Calling this function when DataType() != MetricDataTypeSummary returns an invalid 
 // zero-initialized instance of Summary. Note that using such Summary instance can cause panic.
 //
 // Calling this function on zero-initialized Metric will cause a panic.
@@ -696,6 +713,8 @@ func (ms Metric) Summary() Summary {
 	}
 	return newSummary(v.Summary)
 }
+
+
 
 // CopyTo copies all properties from the current struct to the dest.
 func (ms Metric) CopyTo(dest Metric) {
@@ -876,7 +895,7 @@ func (ms Histogram) CopyTo(dest Histogram) {
 }
 
 // ExponentialHistogram represents the type of a metric that is calculated by aggregating
-// as a ExponentialHistogram of all reported double measurements over a time interval.
+	// as a ExponentialHistogram of all reported double measurements over a time interval.
 //
 // This is a reference type, if passed by value and callee modifies it the
 // caller will see the modification.
@@ -1195,6 +1214,8 @@ func (ms NumberDataPoint) SetIntVal(v int64) {
 	}
 }
 
+
+
 // Exemplars returns the Exemplars associated with this NumberDataPoint.
 func (ms NumberDataPoint) Exemplars() ExemplarSlice {
 	return newExemplarSlice(&(*ms.orig).Exemplars)
@@ -1217,9 +1238,9 @@ func (ms NumberDataPoint) CopyTo(dest NumberDataPoint) {
 	dest.SetTimestamp(ms.Timestamp())
 	switch ms.ValueType() {
 	case NumberDataPointValueTypeDouble:
-		dest.SetDoubleVal(ms.DoubleVal())
+	 dest.SetDoubleVal(ms.DoubleVal())
 	case NumberDataPointValueTypeInt:
-		dest.SetIntVal(ms.IntVal())
+	 dest.SetIntVal(ms.IntVal())
 	}
 
 	ms.Exemplars().CopyTo(dest.Exemplars())
@@ -1432,17 +1453,16 @@ func (ms HistogramDataPoint) SetCount(v uint64) {
 func (ms HistogramDataPoint) Sum() float64 {
 	return (*ms.orig).GetSum()
 }
-
 // HasSum returns true if the HistogramDataPoint contains a
 // Sum value, false otherwise.
 func (ms HistogramDataPoint) HasSum() bool {
 	return ms.orig.Sum_ != nil
 }
-
 // SetSum replaces the sum associated with this HistogramDataPoint.
 func (ms HistogramDataPoint) SetSum(v float64) {
 	(*ms.orig).Sum_ = &otlpmetrics.HistogramDataPoint_Sum{Sum: v}
 }
+
 
 // BucketCounts returns the bucketcounts associated with this HistogramDataPoint.
 func (ms HistogramDataPoint) BucketCounts() ImmutableUInt64Slice {
@@ -1483,33 +1503,31 @@ func (ms HistogramDataPoint) SetFlags(v MetricDataPointFlags) {
 func (ms HistogramDataPoint) Min() float64 {
 	return (*ms.orig).GetMin()
 }
-
 // HasMin returns true if the HistogramDataPoint contains a
 // Min value, false otherwise.
 func (ms HistogramDataPoint) HasMin() bool {
 	return ms.orig.Min_ != nil
 }
-
 // SetMin replaces the min associated with this HistogramDataPoint.
 func (ms HistogramDataPoint) SetMin(v float64) {
 	(*ms.orig).Min_ = &otlpmetrics.HistogramDataPoint_Min{Min: v}
 }
 
+
 // Max returns the max associated with this HistogramDataPoint.
 func (ms HistogramDataPoint) Max() float64 {
 	return (*ms.orig).GetMax()
 }
-
 // HasMax returns true if the HistogramDataPoint contains a
 // Max value, false otherwise.
 func (ms HistogramDataPoint) HasMax() bool {
 	return ms.orig.Max_ != nil
 }
-
 // SetMax replaces the max associated with this HistogramDataPoint.
 func (ms HistogramDataPoint) SetMax(v float64) {
 	(*ms.orig).Max_ = &otlpmetrics.HistogramDataPoint_Max{Max: v}
 }
+
 
 // CopyTo copies all properties from the current struct to the dest.
 func (ms HistogramDataPoint) CopyTo(dest HistogramDataPoint) {
@@ -1517,18 +1535,18 @@ func (ms HistogramDataPoint) CopyTo(dest HistogramDataPoint) {
 	dest.SetStartTimestamp(ms.StartTimestamp())
 	dest.SetTimestamp(ms.Timestamp())
 	dest.SetCount(ms.Count())
-	if ms.HasSum() {
-		dest.SetSum(ms.Sum())
-	}
+if ms.HasSum(){
+	dest.SetSum(ms.Sum())
+}
 
-	if len(ms.orig.BucketCounts) == 0 {
+	if len(ms.orig.BucketCounts) == 0 {	
 		dest.orig.BucketCounts = nil
 	} else {
 		dest.orig.BucketCounts = make([]uint64, len(ms.orig.BucketCounts))
 		copy(dest.orig.BucketCounts, ms.orig.BucketCounts)
 	}
 
-	if len(ms.orig.ExplicitBounds) == 0 {
+	if len(ms.orig.ExplicitBounds) == 0 {	
 		dest.orig.ExplicitBounds = nil
 	} else {
 		dest.orig.ExplicitBounds = make([]float64, len(ms.orig.ExplicitBounds))
@@ -1537,13 +1555,13 @@ func (ms HistogramDataPoint) CopyTo(dest HistogramDataPoint) {
 
 	ms.Exemplars().CopyTo(dest.Exemplars())
 	dest.SetFlags(ms.Flags())
-	if ms.HasMin() {
-		dest.SetMin(ms.Min())
-	}
+if ms.HasMin(){
+	dest.SetMin(ms.Min())
+}
 
-	if ms.HasMax() {
-		dest.SetMax(ms.Max())
-	}
+if ms.HasMax(){
+	dest.SetMax(ms.Max())
+}
 
 }
 
@@ -1685,9 +1703,9 @@ func (es ExponentialHistogramDataPointSlice) RemoveIf(f func(ExponentialHistogra
 }
 
 // ExponentialHistogramDataPoint is a single data point in a timeseries that describes the
-// time-varying values of a ExponentialHistogram of double values. A ExponentialHistogram contains
-// summary statistics for a population of values, it may optionally contain the
-// distribution of those values across a set of buckets.
+	// time-varying values of a ExponentialHistogram of double values. A ExponentialHistogram contains
+	// summary statistics for a population of values, it may optionally contain the
+	// distribution of those values across a set of buckets.
 //
 // This is a reference type, if passed by value and callee modifies it the
 // caller will see the modification.
@@ -1756,17 +1774,16 @@ func (ms ExponentialHistogramDataPoint) SetCount(v uint64) {
 func (ms ExponentialHistogramDataPoint) Sum() float64 {
 	return (*ms.orig).GetSum()
 }
-
 // HasSum returns true if the ExponentialHistogramDataPoint contains a
 // Sum value, false otherwise.
 func (ms ExponentialHistogramDataPoint) HasSum() bool {
 	return ms.orig.Sum_ != nil
 }
-
 // SetSum replaces the sum associated with this ExponentialHistogramDataPoint.
 func (ms ExponentialHistogramDataPoint) SetSum(v float64) {
 	(*ms.orig).Sum_ = &otlpmetrics.ExponentialHistogramDataPoint_Sum{Sum: v}
 }
+
 
 // Scale returns the scale associated with this ExponentialHistogramDataPoint.
 func (ms ExponentialHistogramDataPoint) Scale() int32 {
@@ -1817,33 +1834,31 @@ func (ms ExponentialHistogramDataPoint) SetFlags(v MetricDataPointFlags) {
 func (ms ExponentialHistogramDataPoint) Min() float64 {
 	return (*ms.orig).GetMin()
 }
-
 // HasMin returns true if the ExponentialHistogramDataPoint contains a
 // Min value, false otherwise.
 func (ms ExponentialHistogramDataPoint) HasMin() bool {
 	return ms.orig.Min_ != nil
 }
-
 // SetMin replaces the min associated with this ExponentialHistogramDataPoint.
 func (ms ExponentialHistogramDataPoint) SetMin(v float64) {
 	(*ms.orig).Min_ = &otlpmetrics.ExponentialHistogramDataPoint_Min{Min: v}
 }
 
+
 // Max returns the max associated with this ExponentialHistogramDataPoint.
 func (ms ExponentialHistogramDataPoint) Max() float64 {
 	return (*ms.orig).GetMax()
 }
-
 // HasMax returns true if the ExponentialHistogramDataPoint contains a
 // Max value, false otherwise.
 func (ms ExponentialHistogramDataPoint) HasMax() bool {
 	return ms.orig.Max_ != nil
 }
-
 // SetMax replaces the max associated with this ExponentialHistogramDataPoint.
 func (ms ExponentialHistogramDataPoint) SetMax(v float64) {
 	(*ms.orig).Max_ = &otlpmetrics.ExponentialHistogramDataPoint_Max{Max: v}
 }
+
 
 // CopyTo copies all properties from the current struct to the dest.
 func (ms ExponentialHistogramDataPoint) CopyTo(dest ExponentialHistogramDataPoint) {
@@ -1851,9 +1866,9 @@ func (ms ExponentialHistogramDataPoint) CopyTo(dest ExponentialHistogramDataPoin
 	dest.SetStartTimestamp(ms.StartTimestamp())
 	dest.SetTimestamp(ms.Timestamp())
 	dest.SetCount(ms.Count())
-	if ms.HasSum() {
-		dest.SetSum(ms.Sum())
-	}
+if ms.HasSum(){
+	dest.SetSum(ms.Sum())
+}
 
 	dest.SetScale(ms.Scale())
 	dest.SetZeroCount(ms.ZeroCount())
@@ -1861,13 +1876,13 @@ func (ms ExponentialHistogramDataPoint) CopyTo(dest ExponentialHistogramDataPoin
 	ms.Negative().CopyTo(dest.Negative())
 	ms.Exemplars().CopyTo(dest.Exemplars())
 	dest.SetFlags(ms.Flags())
-	if ms.HasMin() {
-		dest.SetMin(ms.Min())
-	}
+if ms.HasMin(){
+	dest.SetMin(ms.Min())
+}
 
-	if ms.HasMax() {
-		dest.SetMax(ms.Max())
-	}
+if ms.HasMax(){
+	dest.SetMax(ms.Max())
+}
 
 }
 
@@ -1924,7 +1939,7 @@ func (ms Buckets) SetBucketCounts(v ImmutableUInt64Slice) {
 // CopyTo copies all properties from the current struct to the dest.
 func (ms Buckets) CopyTo(dest Buckets) {
 	dest.SetOffset(ms.Offset())
-	if len(ms.orig.BucketCounts) == 0 {
+	if len(ms.orig.BucketCounts) == 0 {	
 		dest.orig.BucketCounts = nil
 	} else {
 		dest.orig.BucketCounts = make([]uint64, len(ms.orig.BucketCounts))
@@ -2449,7 +2464,6 @@ func (es ExemplarSlice) AppendEmpty() Exemplar {
 	*es.orig = append(*es.orig, otlpmetrics.Exemplar{})
 	return es.At(es.Len() - 1)
 }
-
 // MoveAndAppendTo moves all elements from the current slice and appends them to the dest.
 // The current slice will be cleared.
 func (es ExemplarSlice) MoveAndAppendTo(dest ExemplarSlice) {
@@ -2561,6 +2575,8 @@ func (ms Exemplar) SetIntVal(v int64) {
 	}
 }
 
+
+
 // FilteredAttributes returns the FilteredAttributes associated with this Exemplar.
 func (ms Exemplar) FilteredAttributes() Map {
 	return newMap(&(*ms.orig).FilteredAttributes)
@@ -2591,9 +2607,9 @@ func (ms Exemplar) CopyTo(dest Exemplar) {
 	dest.SetTimestamp(ms.Timestamp())
 	switch ms.ValueType() {
 	case ExemplarValueTypeDouble:
-		dest.SetDoubleVal(ms.DoubleVal())
+	 dest.SetDoubleVal(ms.DoubleVal())
 	case ExemplarValueTypeInt:
-		dest.SetIntVal(ms.IntVal())
+	 dest.SetIntVal(ms.IntVal())
 	}
 
 	ms.FilteredAttributes().CopyTo(dest.FilteredAttributes())

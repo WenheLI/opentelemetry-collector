@@ -17,6 +17,9 @@
 
 package internal
 
+import (
+)
+
 // ImmutableByteSlice represents a []byte slice that cannot be mutated.
 // The instance of ImmutableByteSlice can be assigned to multiple objects since it's immutable.
 type ImmutableByteSlice struct {
